@@ -4,10 +4,12 @@
 # @File    : pydantic_note.py
 # @Software: PyCharm
 
-from pydantic import BaseModel ,ValidationError
+from pydantic import BaseModel, ValidationError, constr
 from datetime import datetime, date
 from typing import List,Optional
 from pathlib import Path
+
+
 from sqlalchemy import Column,Integer,String
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.ext.declarative import declarative_base
@@ -59,8 +61,31 @@ dog1 = Dog(birthday=date.today(),weight=6.66,sound=[Sound(sound="wang")])
 
 
 B = declarative_base()
-class CompanyORM(B)
-    __table__ = "companies"
-    id = Column(Integer,primary_key=True,)
+class CompanyORM(B):
+    __tablename__ = "companies"
+    id = Column(Integer,primary_key=True,nullable=False)
+    public_key = Column(String(20),index=True,nullable=False,\
+                        unique=True)
+    name = Column(String(63),unique=True)
+    domains = Column(String(255))
+
+class CompanyMode(BaseModel):
+    id:int
+    public_key:constr(max_length=20)
+    name:constr(max_length = 63)
+    domains:List[constr(max_length=255)]
+
+    class Config:
+        orm_mode = True
+
+co_orm = CompanyORM(
+    id=123,
+    public_key="foo",
+    name = "test",
+    domains=["asd","asd"]
+)
+
+print(CompanyMode.from_orm(co_orm))
+
 
 pass

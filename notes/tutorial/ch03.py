@@ -3,10 +3,6 @@
 # @Author  : hjxylgogogo
 # @File    : ch03.py
 # @Software: PyCharm
-#!/usr/bin/python3
-# -*- coding:utf-8 -*-
-# __author__ = '__Jack__'
-
 from datetime import date
 from enum import Enum
 from typing import Optional, List,Union
